@@ -24,12 +24,15 @@ namespace ConsoleApp1
             a = i;
         }
     }
-    class B:A
+    class B : A
     {
         public int b;
-        public B(int i , int j):base(i)
+        public B(int i, int j) : base(i)
         {
             b = j;
+        }
+        public void dis() {
+            Console.WriteLine("Hello");
         }
     }
     class C:B
@@ -40,7 +43,8 @@ namespace ConsoleApp1
         {
             c = k;
         }
-        public void display() {
+        public void display() { 
+            base.dis(); 
             Console.WriteLine(a+" "+b+" "+c);
         }
     }
