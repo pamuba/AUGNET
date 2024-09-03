@@ -64,5 +64,6 @@ namespace ConsoleApp1
             }
             Console.WriteLine(ob[1].Name+" " + ob[1].Dept);
         }
+
     }
 }
