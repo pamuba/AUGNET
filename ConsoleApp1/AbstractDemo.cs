@@ -59,13 +59,36 @@ namespace ConsoleApp1
         //    Console.WriteLine("display overriden again");
         //}
     }
+
+    interface IF
+    {
+        public static int i = 10;
+        public void A(int t) {
+            i = t;
+        }
+        void M();
+    }
+    class F : IF
+    {
+        public void M() { }
+    }
     internal class AbstractDemo: ISampleInterface, IC
     {
         static void Main(string[] args)
         {
+            F ob = new F(); 
+           
+            
             AbstractDemo obj = new AbstractDemo();
-            
-            
+            //IB isInstance = obj;
+            //isInstance.M();
+
+            IC isInstance = obj;
+            ((IB)isInstance).M();
+
+            IB ibInstance = (IB)obj;
+            ibInstance.M();
+
         }
 
         public void AddMethod()
