@@ -12,7 +12,7 @@ namespace ConsoleApp1
     {
         static string ReplaceSpaces(string s) {
             Console.WriteLine("Replacing With Hyphens:");
-            return s.Replace(' ','-');
+            return s.Replace(' ', '-');
         }
         static string RemoveSpaces(string s)
         {

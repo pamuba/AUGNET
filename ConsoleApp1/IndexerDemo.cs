@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    class Person1 {
+    partial class Person1 {
         public Person1(string name, string dept)
         {
             Name = name;
