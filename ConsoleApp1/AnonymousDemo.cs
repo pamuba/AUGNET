@@ -6,20 +6,23 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    delegate void CountIt(int end);
+    delegate int CountIt(int end);
     internal class AnonymousDemo
     {
         static void Main(string[] args)
         {
             CountIt count = delegate(int end)
             {
+                int sum = 0;
                 for (int i = 1; i <= end; i++)
                 {
                     Console.WriteLine(i);
+                    sum += i;
                 }
+                return sum;
             };
 
-            count(5);
+            Console.WriteLine("SUM:"+count(5));
         }
     }
 }
