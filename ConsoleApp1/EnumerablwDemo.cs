@@ -8,13 +8,24 @@ namespace ConsoleApp2
 {
     using System;
     using System.Collections;
+    using System.Runtime.CompilerServices;
+    public static class test {
+        public static int addStatic(this Person x, Person? y) {
 
-    // Simple business object.
-    //static class Dummy {
-    //    static void fn(this Person p1, Person p2) { 
-    //       p1.CompareTo(p2);    
-    //    }
-    //}
+            return new ReverserClass().getFn(x, y);
+        }
+    }
+    public class ReverserClass : IComparer<Person>
+    {
+        public int getFn(Person ? x, Person? y) {
+            return Compare(x,y);
+        }
+        public int Compare(Person? x, Person? y)
+        {
+            return y.firstName.CompareTo(x.firstName);
+            
+        }
+    }
     public class Person:IComparable<Person>
     {
         public Person(string fName, string lName)
@@ -29,7 +40,8 @@ namespace ConsoleApp2
         public int CompareTo(Person? other)
         {
             if (other == null) return 1;
-            if (other != null) { 
+            if (other != null)
+            {
                 return this.firstName.CompareTo(other.firstName);
             }
             else
@@ -118,27 +130,33 @@ namespace ConsoleApp2
     {
         static void Main()
         {
-            Person[] peopleArray = new Person[3]
+            Person[] peopleArray = new Person[4]
             {
             new Person("John", "Smith"),
             new Person("Jim", "Johnson"),
+            new Person("Adam", "Johnson"),
             new Person("Sue", "Rabon"),
             };
+
+            Array.Sort(peopleArray, new ReverserClass());
 
             People peopleList = new People(peopleArray);
 
             foreach (Person p in peopleList)
                 Console.WriteLine(p.firstName + " " + p.lastName);
 
-            
+
+            var p1 = new Person("John", "Smith");
+            var p2 = new Person("Sam", "Smith");
+            Console.WriteLine(p1.CompareTo(p2));
+
+            var comp = new ReverserClass();
+            comp.Compare(p1, p2);
+
+            Console.WriteLine(p1.addStatic(p2));
+
         }
     }
 
-    /* This code produces output similar to the following:
-     *
-     * John Smith
-     * Jim Johnson
-     * Sue Rabon
-     *
-     */
+    
 }
