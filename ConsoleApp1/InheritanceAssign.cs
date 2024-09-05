@@ -23,6 +23,7 @@ namespace ConsoleApp1
         {
             a = i;
         }
+
     }
     class B : A
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,14 +20,14 @@ namespace ConsoleApp1
         }
     }
     class Test2:Dimensions {
-        new public double Area(int x, int y)
+        public override  double Area(int x, int y)
         {
             return x * y;
         }
     }
     internal class VirtualDemo: Test2
     {
-        public double Area(int x, int y)
+        new public double Area(int x, int y)
         {
             return x + y;
         }

@@ -5,7 +5,7 @@ using System.Text;
 namespace MyApp
 {
     class Person {
-        public int id;
+        
         public string FistName;
         public string LastName;
 
