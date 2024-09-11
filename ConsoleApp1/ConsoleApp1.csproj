@@ -5,7 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>ConsoleApp1.MonitorEnter</StartupObject>
+    <StartupObject>ConsoleApp1.OpenExisting_Mutex</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
