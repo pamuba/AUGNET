@@ -1,0 +1,13 @@
+﻿Built in Generic C# Delagates
+1. Func
+-one or more parameters...16
+-returns one out parameter
+
+2. Action
+-one or more parameters...16
+-returns nothing
+
+3. Predicate
+-one input parameters
+-returns a Boolean value
+
