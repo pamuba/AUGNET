@@ -5,11 +5,10 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>ConsoleApp1.SemaphoreSlimDemo</StartupObject>
+    <StartupObject>ConsoleApp1.MonitorQuestion</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary1\ClassLibrary1.csproj" />
   </ItemGroup>
-
 </Project>
