@@ -1,0 +1,685 @@
+﻿using System;
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("C# For Loop");
+            for (int i = 1; i <= 10; i++)
+            {
+                Console.WriteLine(i);
+            }
+            Console.ReadLine();
+        }
+    }
+}
+//////////////////
+using System;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("C# Parallel For Loop");
+            
+            //It will start from 1 until 10
+            //Here 1 is the start index which is Inclusive
+            //Here 11 us the end index which is Exclusive
+            //Here number is similar to i of our standard for loop
+            //The value will be store in the variable number
+            Parallel.For(1, 11, number => {
+                Console.WriteLine(number);
+            });
+            Console.ReadLine();
+        }
+    }
+}
+/////////////////////
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("C# For Loop");
+            int number = 10;
+            for (int count = 0; count < number; count++)
+            {
+                //Thread.CurrentThread.ManagedThreadId returns an integer that 
+                //represents a unique identifier for the current managed thread.
+                Console.WriteLine($"value of count = {count}, thread = {Thread.CurrentThread.ManagedThreadId}");
+                //Sleep the loop for 10 miliseconds
+                Thread.Sleep(10);
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("Parallel For Loop");
+            Parallel.For(0, number, count =>
+            {
+                Console.WriteLine($"value of count = {count}, thread = {Thread.CurrentThread.ManagedThreadId}");
+                //Sleep the loop for 10 miliseconds
+                Thread.Sleep(10);
+            });
+            Console.ReadLine();
+        }
+    }
+}
+/////////////////////////////////
+using System;
+using System.Diagnostics;
+
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main()
+        {
+            DateTime StartDateTime = DateTime.Now;
+            Stopwatch stopWatch = new Stopwatch();
+
+            Console.WriteLine("For Loop Execution start");
+            stopWatch.Start();
+            for (int i = 0; i < 10; i++)
+            {
+                long total = DoSomeIndependentTask();
+                Console.WriteLine("{0} - {1}", i, total);
+            }
+            DateTime EndDateTime = DateTime.Now;
+            Console.WriteLine("For Loop Execution end ");
+            stopWatch.Stop();
+            Console.WriteLine($"Time Taken to Execute the For Loop in miliseconds {stopWatch.ElapsedMilliseconds}");
+            
+            Console.ReadLine();
+        }
+
+        static long DoSomeIndependentTask()
+        {
+            //Do Some Time Consuming Task here
+            //Most Probably some calculation or DB related activity
+            long total = 0;
+            for (int i = 1; i < 100000000; i++)
+            {
+                total += i;
+            }
+            return total;
+        }
+    }
+}
+////////////////////////////////
+
+using System;
+using System.Diagnostics;
+
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main()
+        {
+            DateTime StartDateTime = DateTime.Now;
+            Stopwatch stopWatch = new Stopwatch();
+
+            Console.WriteLine("For Loop Execution start");
+            stopWatch.Start();
+            for (int i = 0; i < 10; i++)
+            {
+                long total = DoSomeIndependentTask();
+                Console.WriteLine("{0} - {1}", i, total);
+            }
+            DateTime EndDateTime = DateTime.Now;
+            Console.WriteLine("For Loop Execution end ");
+            stopWatch.Stop();
+            Console.WriteLine($"Time Taken to Execute the For Loop in miliseconds {stopWatch.ElapsedMilliseconds}");
+            
+            Console.ReadLine();
+        }
+
+        static long DoSomeIndependentTask()
+        {
+            //Do Some Time Consuming Task here
+            //Most Probably some calculation or DB related activity
+            long total = 0;
+            for (int i = 1; i < 100000000; i++)
+            {
+                total += i;
+            }
+            return total;
+        }
+    }
+}
+///////////////////////
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main()
+        {
+            DateTime StartDateTime = DateTime.Now;
+            Stopwatch stopWatch = new Stopwatch();
+
+            Console.WriteLine("Parallel For Loop Execution start");
+            stopWatch.Start();
+       
+            Parallel.For(0, 10, i => {
+                long total = DoSomeIndependentTask();
+                Console.WriteLine("{0} - {1}", i, total);
+            });
+
+            DateTime EndDateTime = DateTime.Now;
+            Console.WriteLine("Parallel For Loop Execution end ");
+            stopWatch.Stop();
+            Console.WriteLine($"Time Taken to Execute Parallel For Loop in miliseconds {stopWatch.ElapsedMilliseconds}");
+            
+            Console.ReadLine();
+        }
+
+        static long DoSomeIndependentTask()
+        {
+            //Do Some Time Consuming Task here
+            //Most Probably some calculation or DB related activity
+            long total = 0;
+            for (int i = 1; i < 100000000; i++)
+            {
+                total += i;
+            }
+            return total;
+        }
+    }
+}
+////////////////////////
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //Limiting the maximum degree of parallelism to 2
+            var options = new ParallelOptions()
+            {
+                MaxDegreeOfParallelism = 2
+            };
+            int n = 10;
+            Parallel.For(0, n, options, i =>
+            {
+                Console.WriteLine(@"value of i = {0}, thread = {1}",
+                i, Thread.CurrentThread.ManagedThreadId);
+                Thread.Sleep(10);
+            });
+            Console.WriteLine("Press any key to exist");
+            Console.ReadLine();
+        }
+    }
+}
+//////////////////////////////////
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main()
+        {
+            var BreakSource = Enumerable.Range(0, 1000).ToList();
+            int BreakData = 0;
+            Console.WriteLine("Using loopstate Break Method");
+            Parallel.For(0, BreakSource.Count, (i, BreakLoopState) =>
+            {
+                BreakData += i;
+                if (BreakData > 100)
+                {
+                    BreakLoopState.Break();
+                    Console.WriteLine("Break called iteration {0}. data = {1} ", i, BreakData);
+                }
+            });
+            Console.WriteLine("Break called data = {0} ", BreakData);
+
+            var StopSource = Enumerable.Range(0, 1000).ToList();
+            int StopData = 0;
+            Console.WriteLine("Using loopstate Stop Method");
+            Parallel.For(0, StopSource.Count, (i, StopLoopState) =>
+            {
+                StopData += i;
+                if (StopData > 100)
+                {
+                    StopLoopState.Stop();
+                    Console.WriteLine("Stop called iteration {0}. data = {1} ", i, StopData);
+                }
+            });
+
+            Console.WriteLine("Stop called data = {0} ", StopData);
+            Console.ReadKey();
+        }
+    }
+}
+/////////////////////////////////////////////////////////////
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+
+            Console.WriteLine("Standard Foreach Loop Started");
+            stopwatch.Start();
+            List<int> integerList = Enumerable.Range(1, 10).ToList();
+            foreach (int i in integerList)
+            {
+                long total = DoSomeIndependentTimeConsumingTask();
+                Console.WriteLine("{0} - {1}", i, total);
+            };
+
+            Console.WriteLine("Standard Foreach Loop Ended");
+            stopwatch.Stop();
+            
+            Console.WriteLine($"Time Taken by Standard Foreach Loop in Miliseconds {stopwatch.ElapsedMilliseconds}");
+            Console.ReadLine();
+        }
+
+        static long DoSomeIndependentTimeConsumingTask()
+        {
+            //Do Some Time Consuming Task here
+            long total = 0;
+            for (int i = 1; i < 100000000; i++)
+            {
+                total += i;
+            }
+            return total;
+        }
+    }
+}
+/////////////////////////////////////////////////
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+
+            Console.WriteLine("Parallel Foreach Loop Started");
+            stopwatch.Start();
+            List<int> integerList = Enumerable.Range(1, 10).ToList();
+
+            Parallel.ForEach(integerList, i =>
+            {
+                long total = DoSomeIndependentTimeConsumingTask();
+                Console.WriteLine("{0} - {1}", i, total);
+            });
+            Console.WriteLine("Parallel Foreach Loop Ended");
+            stopwatch.Stop();
+            
+            Console.WriteLine($"Time Taken by Parallel Foreach Loop in Miliseconds {stopwatch.ElapsedMilliseconds}");
+            Console.ReadLine();
+        }
+
+        static long DoSomeIndependentTimeConsumingTask()
+        {
+            //Do Some Time Consuming Task here
+            long total = 0;
+            for (int i = 1; i < 100000000; i++)
+            {
+                total += i;
+            }
+            return total;
+        }
+    }
+}
+/////////////////////////////////////////////
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main()
+        {
+            List<int> integerList = Enumerable.Range(0, 10).ToList();
+            Parallel.ForEach(integerList, i =>
+            {
+                Console.WriteLine(@"value of i = {0}, thread = {1}",i, Thread.CurrentThread.ManagedThreadId);
+            });
+            Console.ReadLine();
+        }
+    }
+}
+////////////////////////////////////////
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main()
+        {
+            List<int> integerList = Enumerable.Range(0, 10).ToList();
+            var options = new ParallelOptions() { MaxDegreeOfParallelism = 2 };
+
+            Parallel.ForEach(integerList, options, i =>
+            {
+                Console.WriteLine(@"value of i = {0}, thread = {1}",i, Thread.CurrentThread.ManagedThreadId);
+            });
+            Console.ReadLine();
+        }
+    }
+}
+////////////////////////////////////
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    class Program
+    {
+        static void Main()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+
+            Console.WriteLine("Standard Foreach Loop Started");
+            stopwatch.Start();
+            List<int> integerList = Enumerable.Range(1, 10).ToList();
+            foreach (int i in integerList)
+            {
+                DoSomeIndependentTask(i);
+            };
+            
+            stopwatch.Stop();
+            Console.WriteLine("Standard Foreach Loop Ended");
+            Console.WriteLine($"Time Taken by Standard Foreach Loop in Miliseconds {stopwatch.ElapsedMilliseconds}");
+
+
+            Console.WriteLine("\nParallel Foreach Loop Started");
+            stopwatch.Restart();
+            
+            Parallel.ForEach(integerList, i =>
+            {
+                DoSomeIndependentTask(i);
+            });
+            
+            stopwatch.Stop();
+            Console.WriteLine("Parallel Foreach Loop Ended");
+
+            Console.WriteLine($"Time Taken by Parallel Foreach Loop in Miliseconds {stopwatch.ElapsedMilliseconds}");
+            
+            Console.ReadLine();
+        }
+
+        static void DoSomeIndependentTask(int i)
+        {
+            Console.WriteLine($"Number: {i}");
+        }
+    }
+}
+
+////////////////////////////////////
+using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    public class Program
+    {
+        static void Main()
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            
+            stopWatch.Start();
+            //Calling Three methods sequentially
+            Method1();
+            Method2();
+            Method3();
+            stopWatch.Stop();
+            
+            Console.WriteLine($"Sequential Execution Took {stopWatch.ElapsedMilliseconds} Milliseconds");
+            Console.ReadKey();
+        }
+        static void Method1()
+        {
+            Thread.Sleep(200);
+            Console.WriteLine($"Method 1 Completed by Thread={Thread.CurrentThread.ManagedThreadId}");
+        }
+        static void Method2()
+        {
+            Thread.Sleep(200);
+            Console.WriteLine($"Method 2 Completed by Thread={Thread.CurrentThread.ManagedThreadId}");
+        }
+        static void Method3()
+        {
+            Thread.Sleep(200);
+            Console.WriteLine($"Method 3 Completed by Thread={Thread.CurrentThread.ManagedThreadId}");
+        }
+    }
+}
+//////////////////////////////////////////////
+using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    public class Program
+    {
+        static void Main()
+        {
+            Stopwatch stopWatch = new Stopwatch();
+
+            stopWatch.Start();
+
+            //Calling Three methods Parallely
+            Parallel.Invoke(
+                 Method1, Method2, Method3
+            );
+
+            stopWatch.Stop();
+            Console.WriteLine($"Parallel Execution Took {stopWatch.ElapsedMilliseconds} Milliseconds");
+
+            Console.ReadKey();
+        }
+        static void Method1()
+        {
+            Thread.Sleep(200);
+            Console.WriteLine($"Method 1 Completed by Thread={Thread.CurrentThread.ManagedThreadId}");
+        }
+        static void Method2()
+        {
+            Thread.Sleep(200);
+            Console.WriteLine($"Method 2 Completed by Thread={Thread.CurrentThread.ManagedThreadId}");
+        }
+        static void Method3()
+        {
+            Thread.Sleep(200);
+            Console.WriteLine($"Method 3 Completed by Thread={Thread.CurrentThread.ManagedThreadId}");
+        }
+    }
+}
+/////////////////////////////////////
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    public class Program
+    {
+        static void Main()
+        {
+            Parallel.Invoke(
+                 NormalAction, // Invoking Normal Method
+                 delegate ()   // Invoking an inline delegate 
+                 {
+                     Console.WriteLine($"Method 2, Thread={Thread.CurrentThread.ManagedThreadId}");
+                 },
+                () =>   // Invoking a lambda expression
+                {
+                    Console.WriteLine($"Method 3, Thread={Thread.CurrentThread.ManagedThreadId}");
+                }
+            );
+            Console.WriteLine("Press any key to exist.");
+            Console.ReadKey();
+        }
+        static void NormalAction()
+        {
+            Console.WriteLine($"Method 1, Thread={Thread.CurrentThread.ManagedThreadId}");
+        }
+    }
+}
+////////////////////////////////////////////////////
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    public class ParallelInvoke
+    {
+        static void Main()
+        {
+            Parallel.Invoke(
+                    () => DoSomeTask(1),
+                    () => DoSomeTask(2),
+                    () => DoSomeTask(3),
+                    () => DoSomeTask(4),
+                    () => DoSomeTask(5),
+                    () => DoSomeTask(6),
+                    () => DoSomeTask(7)
+                );
+            Console.ReadKey();
+        }
+        static void DoSomeTask(int number)
+        {
+            Console.WriteLine($"DoSomeTask {number} started by Thread {Thread.CurrentThread.ManagedThreadId}");
+            //Sleep for 5000 milliseconds
+            Thread.Sleep(5000);
+            Console.WriteLine($"DoSomeTask {number} completed by Thread {Thread.CurrentThread.ManagedThreadId}");
+        }
+    }
+}
+///////////////////////////////////////////////
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    public class ParallelInvoke
+    {
+        static void Main()
+        {
+            //Allowing three task to execute at a time
+            ParallelOptions parallelOptions = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = 3
+            };
+            //parallelOptions.MaxDegreeOfParallelism = System.Environment.ProcessorCount - 1;
+
+            //Passing ParallelOptions as the first parameter
+            Parallel.Invoke(
+                    parallelOptions,
+                    () => DoSomeTask(1),
+                    () => DoSomeTask(2),
+                    () => DoSomeTask(3),
+                    () => DoSomeTask(4),
+                    () => DoSomeTask(5),
+                    () => DoSomeTask(6),
+                    () => DoSomeTask(7)
+                );
+            Console.ReadKey();
+        }
+        static void DoSomeTask(int number)
+        {
+            Console.WriteLine($"DoSomeTask {number} started by Thread {Thread.CurrentThread.ManagedThreadId}");
+            //Sleep for 500 milliseconds
+            Thread.Sleep(5000);
+            Console.WriteLine($"DoSomeTask {number} completed by Thread {Thread.CurrentThread.ManagedThreadId}");
+        }
+    }
+}
+///////////////////////////////////////
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ParallelProgrammingDemo
+{
+    public class Program
+    {
+        static void Main()
+        {
+            int intResult = 0;
+            string strResult = string.Empty;
+            //Calling Three methods Parallely
+            Parallel.Invoke(
+                () => intResult = Method1(),
+                () => strResult = Method2("Pranaya"),
+                () => Method3(100)
+            );
+
+            Console.WriteLine($"Method1 Result: {intResult}");
+            Console.WriteLine($"Method2 Result: {strResult}");
+            Console.WriteLine($"Parallel Execution Completed");
+
+            Console.ReadKey();
+        }
+        static int Method1()
+        {
+            Task.Delay(200);
+            Console.WriteLine($"Method 1 Completed by Thread={Thread.CurrentThread.ManagedThreadId}");
+            return 100;
+        }
+        static string Method2(string name)
+        {
+            Task.Delay(200);
+            Console.WriteLine($"Method 2 Completed by Thread={Thread.CurrentThread.ManagedThreadId}");
+            return "Hello:" + name;
+        }
+        static void Method3(int number)
+        {
+            Task.Delay(200);
+            Console.WriteLine($"Method 3 Completed by Thread={Thread.CurrentThread.ManagedThreadId}");
+        }
+    }
+}
+
+/////////////////////////////////////////////////////
+
+
